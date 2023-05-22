@@ -50,6 +50,7 @@ public static unsafe class Graphics {
 			API = GraphicsAPI.None,
 			ShouldSwapAutomatically = false,
 			IsContextControlDisabled = true,
+			Size = new Vector2D<int>(1600, 900),
 			Position = new Vector2D<int>(0, 957)
 		});
 
