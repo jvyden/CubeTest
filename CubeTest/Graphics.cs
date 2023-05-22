@@ -107,6 +107,8 @@ public static unsafe class Graphics {
 					WorldGraphics.Camera.Yaw += cameraSpeed * (float)d;
 					
 			}
+
+			WorldGraphics.Camera.Pitch = Math.Clamp(WorldGraphics.Camera.Pitch, -89.99f, 89.99f);
 		};
 
 		Window.Run();
@@ -137,17 +139,18 @@ public static unsafe class Graphics {
 		//Create our command encoder
 		CommandEncoder* encoder = WebGPU.DeviceCreateCommandEncoder(Device, new CommandEncoderDescriptor());
 
-		//Create our colour attatchment, with a clear value of green
+		//Create our colour attachment
 		RenderPassColorAttachment colorAttachment = new RenderPassColorAttachment {
 			View          = nextView,
 			ResolveTarget = null,
 			LoadOp        = LoadOp.Clear,
 			StoreOp       = StoreOp.Store,
-			ClearValue = new Color {
-				R = 0,
-				G = 0,
-				B = 0,
-				A = 0
+			ClearValue = new Color
+			{
+				R = 70 / 255d,
+				G = 179 / 255d,
+				B = 234 / 255d,
+				A = 1 / 255d,
 			}
 		};
 
@@ -172,7 +175,7 @@ public static unsafe class Graphics {
 		WorldGraphics.Draw(encoder, renderPass);
 
 		//Draws a simple textured quad to the screen
-		// UiGraphics.TestDraw(renderPass);
+		UiGraphics.TestDraw(renderPass);
 
 		//End the render pass
 		WebGPU.RenderPassEncoderEnd(renderPass);
