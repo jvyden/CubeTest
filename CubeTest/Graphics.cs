@@ -49,7 +49,8 @@ public static unsafe class Graphics {
 		Window = Silk.NET.Windowing.Window.Create(WindowOptions.Default with {
 			API = GraphicsAPI.None,
 			ShouldSwapAutomatically = false,
-			IsContextControlDisabled = true, Position = new Vector2D<int>(2000, 0)
+			IsContextControlDisabled = true,
+			Position = new Vector2D<int>(0, 957)
 		});
 
 		Window.Load              += Load;
@@ -60,11 +61,18 @@ public static unsafe class Graphics {
 		Vector2 last = Vector2.Zero;
 		Window.Update += d => {
 			foreach (IMouse mouse in Input.Mice) {
-				// mouse.Cursor.CursorMode = CursorMode.Raw;
-
-				WorldGraphics.Camera.Pitch -= (mouse.Position.Y - last.Y) * 0.1f;
-				WorldGraphics.Camera.Yaw   += (mouse.Position.X - last.X) * 0.1f;
-
+				if (mouse.IsButtonPressed(MouseButton.Left))
+				{
+					mouse.Cursor.CursorMode = CursorMode.Raw;
+			
+					WorldGraphics.Camera.Pitch -= (mouse.Position.Y - last.Y) * 0.1f;
+					WorldGraphics.Camera.Yaw   += (mouse.Position.X - last.X) * 0.1f;
+				}
+				else
+				{
+					mouse.Cursor.CursorMode = CursorMode.Normal;
+				}
+				
 				last = mouse.Position;
 			}
 
@@ -83,6 +91,20 @@ public static unsafe class Graphics {
 					WorldGraphics.Camera.Position += WorldGraphics.Camera.Front * (float)d;
 				if (kb.IsKeyPressed(Key.S))
 					WorldGraphics.Camera.Position -= WorldGraphics.Camera.Front * (float)d;
+
+				float cameraSpeed = 150f;
+				if (kb.IsKeyPressed(Key.ControlLeft))
+					cameraSpeed *= 2;
+				
+				if(kb.IsKeyPressed(Key.Up))
+					WorldGraphics.Camera.Pitch += cameraSpeed * (float)d;
+				if(kb.IsKeyPressed(Key.Down))
+					WorldGraphics.Camera.Pitch -= cameraSpeed * (float)d;
+				if(kb.IsKeyPressed(Key.Left))
+					WorldGraphics.Camera.Yaw -= cameraSpeed * (float)d;
+				if(kb.IsKeyPressed(Key.Right))
+					WorldGraphics.Camera.Yaw += cameraSpeed * (float)d;
+					
 			}
 		};
 
@@ -122,9 +144,9 @@ public static unsafe class Graphics {
 			StoreOp       = StoreOp.Store,
 			ClearValue = new Color {
 				R = 0,
-				G = 1,
+				G = 0,
 				B = 0,
-				A = 1
+				A = 0
 			}
 		};
 
